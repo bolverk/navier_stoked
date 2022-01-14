@@ -27,7 +27,15 @@ def make_eqns(geometry='cartesian'):
     res -= (zeta+4*mu/3)*gradient(divergence(v))
     res += mu*curl(curl(v))
     res = res.subs({old_var:new_var for old_var, new_var in zip((S.x, S.y, S.z), aesthetic[geometry])})
-    return res
+    return {'equations':res,
+            'velocity':v,
+            'pressure':p,
+            'density':rho,
+            'mu':mu,
+            'zeta':zeta,
+            'coordinate system':S,
+            'time':t,
+            'coordinates vars':aesthetic[geometry]}
 
 def get_input():
 
