@@ -12,23 +12,24 @@ def make_eqns(geometry='cartesian'):
                    transformation=geometry,
                    variable_names='xyz')
     t = sympy.Symbol('t')
-    zeta, mu = sympy.symbols('zeta mu', positive=True)
+    mu = sympy.symbols('mu', positive=True)
     args = (t,S.x,S.y,S.z)
     v_1, v_2, v_3, rho, p = [f(*args) for f
                           in sympy.symbols('v_{1:4} rho p', cls=sympy.Function)]
-    v = sum((v_n*vec for v_n, vec in zip((v_1, v_2, v_3),(S.i,S.j,S.k))), 0*S.i)
+    v = sum((v_n*vec
+             for v_n, vec
+             in zip((v_1, v_2, v_3),(S.i,S.j,S.k))),
+            0*S.i)
     res = v.diff(t)
     res += gradient(v.dot(v)/2) - (v^curl(v))
     res += gradient(p)/rho
-    res -= (zeta+4*mu/3)*gradient(divergence(v))
-    res += mu*curl(curl(v))
+    res -= mu*(gradient(divergence(v)) - curl(curl(v)))
     res = res.subs({old_var:new_var for old_var, new_var in zip((S.x, S.y, S.z), aesthetic[geometry])})
     return {'equations':res,
             'velocity':v,
             'pressure':p,
             'density':rho,
             'mu':mu,
-            'zeta':zeta,
             'coordinate system':S,
             'time':t,
             'coordinates vars':aesthetic[geometry]}
