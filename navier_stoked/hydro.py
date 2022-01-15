@@ -2,10 +2,6 @@ import sympy
 from sympy.vector import CoordSys3D, gradient, curl, divergence
 from argparse import ArgumentParser
 
-geometries = ['cartesian',
-              'cylindrical',
-              'spherical']
-
 aesthetic = {'cartesian':sympy.symbols('x y z'),
              'cylindrical':sympy.symbols('r phi z'),
              'spherical':sympy.symbols('r theta phi')}
